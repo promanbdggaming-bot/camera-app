@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            padding: 20px;
+            color: #333;
+        }
+        #video {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            background-color: #000;
+        }
+        .btn {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin-top: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn:disabled {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Verification Required</h2>
+    <p>Please allow camera access to continue.</p>
+
+    <video id="video" autoplay playsinline muted></video>
+    <br>
+    <button id="startBtn" class="btn" onclick="startCamera()">Start Camera</button>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        let stream;
+
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                const videoElement = document.getElementById('video');
+                videoElement.srcObject = stream;
+                document.getElementById('startBtn').innerText = "Camera Active";
+                document.getElementById('startBtn').disabled = true;
+            } catch (err) {
+                alert("Camera permission denied or not supported!");
+                console.error(err);
+            }
+        }
+    </script>
+</body>
+</html>
